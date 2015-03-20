@@ -1,0 +1,123 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://io.netty/example/httpxml" elementFormDefault="qualified" targetNamespace="http://io.netty/example/httpxml">
+  <xs:element type="tns:order" name="order"/>
+  <xs:complexType name="address">
+    <xs:annotation>
+      <xs:documentation>Address information.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element type="xs:string" name="street1" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>First line of street information (required).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element type="xs:string" name="street2" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Second line of street information (optional).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element type="xs:string" name="city" minOccurs="0"/>
+      <xs:element type="xs:string" name="state" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>State abbreviation (required for the U.S. and Canada, optional otherwise).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element type="xs:string" name="postCode" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Postal code (required for the U.S. and Canada, optional otherwise).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element type="xs:string" name="country" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Country name (optional, U.S. assumed if not supplied).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="order">
+    <xs:annotation>
+      <xs:documentation>Order information.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="customer" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element type="xs:string" name="firstName" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>Personal name.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="lastName" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>Family name.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="middleName" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+          <xs:attribute type="xs:long" use="required" name="customerNumber"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element type="tns:address" name="billTo" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Billing address information.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="shipping" minOccurs="0">
+        <xs:simpleType>
+          <xs:annotation>
+            <xs:documentation>Supported shipment methods. The "INTERNATIONAL" shipment methods can only be used for orders with shipping addresses outside the U.S., and one of these methods is required in this case.</xs:documentation>
+          </xs:annotation>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="STANDARD_MAIL"/>
+            <xs:enumeration value="PRIORITY_MAIL"/>
+            <xs:enumeration value="INTERNATIONAL_MAIL"/>
+            <xs:enumeration value="DOMESTIC_EXPRESS"/>
+            <xs:enumeration value="INTERNATIONAL_EXPRESS"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="tns:address" name="shipTo" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Shipping address information. If missing, the billing address is also used as the shipping address.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="item" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element type="xs:string" name="id" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>Stock identifier. This is expected to be 12 characters in length, with two leading alpha characters followed by ten decimal digits.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="description" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>Text description of item.</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute type="xs:int" use="required" name="quantity">
+            <xs:annotation>
+              <xs:documentation>Number of units ordered.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="xs:float" use="required" name="price">
+            <xs:annotation>
+              <xs:documentation>Price per unit.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute type="xs:long" use="required" name="orderNumber"/>
+    <xs:attribute type="xs:date" name="orderDate">
+      <xs:annotation>
+        <xs:documentation>Date order was placed with server.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute type="xs:date" name="shipDate">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Date order was shipped. This will be <code>null</code> if the order has not yet shipped.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute type="xs:float" name="total"/>
+  </xs:complexType>
+</xs:schema>

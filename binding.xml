@@ -1,0 +1,39 @@
+<binding xmlns:ns1="http://io.netty/example/httpxml" name="binding" package="io.netty.example.httpxml">
+  <namespace uri="http://io.netty/example/httpxml" default="elements"/>
+  <mapping abstract="true" type-name="ns1:order" class="io.netty.example.httpxml.Order">
+    <value style="attribute" name="orderNumber" field="orderNumber"/>
+    <structure field="customer" usage="optional" name="customer">
+      <value style="attribute" name="customerNumber" field="customerNumber"/>
+      <value style="element" name="firstName" field="firstName" usage="optional"/>
+      <value style="element" name="lastName" field="lastName" usage="optional"/>
+      <collection field="middleNames" usage="optional" create-type="java.util.ArrayList">
+        <value name="middleName" type="java.lang.String"/>
+      </collection>
+    </structure>
+    <structure map-as="ns1:address" field="billTo" usage="optional" name="billTo"/>
+    <value style="element" name="shipping" field="shipping" usage="optional"/>
+    <structure map-as="ns1:address" field="shipTo" usage="optional" name="shipTo"/>
+    <collection field="items" usage="optional" create-type="java.util.ArrayList">
+      <structure type="io.netty.example.httpxml.Item" name="item">
+        <value style="element" name="id" field="id" usage="optional"/>
+        <value style="element" name="description" field="description" usage="optional"/>
+        <value style="attribute" name="quantity" field="quantity"/>
+        <value style="attribute" name="price" field="price"/>
+      </structure>
+    </collection>
+    <value style="attribute" name="orderDate" field="orderDate" usage="optional"/>
+    <value style="attribute" name="shipDate" field="shipDate" usage="optional"/>
+    <value style="attribute" name="total" field="total" usage="optional"/>
+  </mapping>
+  <mapping class="io.netty.example.httpxml.Order" name="order">
+    <structure map-as="ns1:order"/>
+  </mapping>
+  <mapping abstract="true" type-name="ns1:address" class="io.netty.example.httpxml.Address">
+    <value style="element" name="street1" field="street1" usage="optional"/>
+    <value style="element" name="street2" field="street2" usage="optional"/>
+    <value style="element" name="city" field="city" usage="optional"/>
+    <value style="element" name="state" field="state" usage="optional"/>
+    <value style="element" name="postCode" field="postCode" usage="optional"/>
+    <value style="element" name="country" field="country" usage="optional"/>
+  </mapping>
+</binding>
